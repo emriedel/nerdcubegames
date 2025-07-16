@@ -6,10 +6,11 @@ export class WordValidator {
 
   constructor() {
     this.validWords = new Set();
-    this.loadDictionary();
+    // Load dictionary lazily when first needed
   }
 
   private async loadDictionary(): Promise<void> {
+    if (this.isLoaded) return;
     try {
       // For now, use a basic word list. In production, this would load from a proper dictionary file
       const basicWords = [
@@ -128,11 +129,77 @@ export class WordValidator {
   }
 
   isValidWord(word: string): boolean {
-    if (!this.isLoaded || word.length < BOGGLE_CONSTANTS.MIN_WORD_LENGTH) {
+    if (word.length < BOGGLE_CONSTANTS.MIN_WORD_LENGTH) {
       return false;
     }
 
+    // Load dictionary synchronously if not loaded
+    if (!this.isLoaded) {
+      this.loadDictionarySync();
+    }
+
     return this.validWords.has(word.toLowerCase());
+  }
+
+  private loadDictionarySync(): void {
+    if (this.isLoaded) return;
+    
+    try {
+      // Load basic words synchronously to avoid async issues
+      const basicWords = [
+        // 3-letter words
+        'cat', 'dog', 'run', 'sun', 'fun', 'bat', 'hat', 'rat', 'mat', 'sat',
+        'car', 'bar', 'far', 'jar', 'war', 'art', 'arm', 'age', 'ace', 'ice',
+        'and', 'ant', 'any', 'are', 'ask', 'ate', 'bad', 'bag', 'bed', 'big',
+        'bit', 'boy', 'but', 'buy', 'can', 'cap', 'cup', 'cut', 'day', 'did',
+        'die', 'eat', 'egg', 'end', 'eye', 'far', 'few', 'fly', 'for', 'get',
+        'got', 'gun', 'guy', 'had', 'has', 'her', 'him', 'his', 'hot', 'how',
+        'its', 'job', 'key', 'kid', 'law', 'lay', 'leg', 'let', 'lie', 'lot',
+        'low', 'man', 'may', 'new', 'not', 'now', 'old', 'one', 'our', 'out',
+        'own', 'pay', 'put', 'ran', 'red', 'run', 'saw', 'say', 'see', 'she',
+        'sit', 'six', 'ten', 'the', 'too', 'top', 'try', 'two', 'use', 'was',
+        'way', 'who', 'why', 'win', 'won', 'yes', 'yet', 'you',
+        
+        // 4-letter words (subset for faster loading)
+        'able', 'back', 'ball', 'base', 'bear', 'beat', 'been', 'best', 'bike',
+        'bird', 'blue', 'boat', 'body', 'book', 'born', 'both', 'call', 'came',
+        'care', 'case', 'city', 'come', 'cool', 'corn', 'cost', 'dark', 'data',
+        'date', 'dead', 'deal', 'deep', 'does', 'done', 'door', 'down', 'draw',
+        'drop', 'each', 'east', 'easy', 'even', 'ever', 'face', 'fact', 'fall',
+        'farm', 'fast', 'fear', 'feel', 'feet', 'fell', 'felt', 'file', 'fill',
+        'find', 'fine', 'fire', 'fish', 'five', 'food', 'foot', 'form', 'four',
+        'free', 'from', 'full', 'game', 'gave', 'give', 'glad', 'goes', 'gold',
+        'gone', 'good', 'gray', 'grew', 'grow', 'hair', 'half', 'hand', 'hard',
+        'have', 'head', 'hear', 'heat', 'held', 'help', 'here', 'high', 'hill',
+        'hold', 'home', 'hope', 'hour', 'huge', 'idea', 'into', 'item', 'join',
+        'jump', 'just', 'keep', 'kept', 'kind', 'knew', 'know', 'lack', 'land',
+        'last', 'late', 'lead', 'left', 'less', 'life', 'like', 'line', 'list',
+        'live', 'long', 'look', 'lose', 'lost', 'love', 'made', 'make', 'many',
+        'mark', 'mass', 'math', 'meal', 'mean', 'meet', 'mind', 'miss', 'mode',
+        'more', 'most', 'move', 'much', 'name', 'near', 'need', 'news', 'next',
+        'nice', 'note', 'once', 'only', 'open', 'over', 'page', 'paid', 'part',
+        'past', 'path', 'pick', 'plan', 'play', 'poor', 'push', 'race', 'read',
+        'real', 'rise', 'risk', 'road', 'rock', 'role', 'room', 'rule', 'safe',
+        'said', 'same', 'save', 'seat', 'seem', 'seen', 'self', 'sell', 'send',
+        'sent', 'ship', 'shop', 'show', 'side', 'sign', 'site', 'size', 'slow',
+        'snow', 'some', 'song', 'soon', 'sort', 'soul', 'stop', 'such', 'sure',
+        'take', 'talk', 'task', 'team', 'tell', 'term', 'test', 'than', 'that',
+        'them', 'then', 'they', 'this', 'thus', 'time', 'told', 'took', 'town',
+        'tree', 'true', 'turn', 'type', 'unit', 'upon', 'used', 'user', 'vary',
+        'very', 'view', 'wait', 'walk', 'wall', 'want', 'warm', 'wave', 'ways',
+        'wear', 'week', 'well', 'went', 'were', 'what', 'when', 'will', 'wind',
+        'wish', 'with', 'wood', 'word', 'work', 'year', 'your'
+      ];
+
+      for (const word of basicWords) {
+        this.validWords.add(word.toLowerCase());
+      }
+      
+      this.isLoaded = true;
+    } catch (error) {
+      console.error('Failed to load dictionary:', error);
+      this.isLoaded = false;
+    }
   }
 
   getWordScore(word: string): number {

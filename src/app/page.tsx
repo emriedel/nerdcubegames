@@ -13,7 +13,7 @@ export default function Home() {
       </div>
 
       <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3 max-w-4xl mx-auto">
-        <Link href="/games/boggle" className="group">
+        <Link href="/games/boggle" className="group" prefetch={true}>
           <div className="bg-white dark:bg-gray-700 rounded-lg shadow-md p-6 hover:shadow-lg transition-shadow">
             <h2 className="text-2xl font-semibold text-gray-900 dark:text-white mb-2 group-hover:text-blue-600 dark:group-hover:text-blue-400">
               Boggle

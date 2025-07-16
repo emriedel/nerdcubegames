@@ -10,7 +10,7 @@ interface WordDisplayProps {
   className?: string;
 }
 
-const WordDisplay: React.FC<WordDisplayProps> = ({ 
+const WordDisplay: React.FC<WordDisplayProps> = React.memo(({ 
   currentWord, 
   isValid, 
   className 
@@ -53,6 +53,8 @@ const WordDisplay: React.FC<WordDisplayProps> = ({
       </AnimatePresence>
     </div>
   );
-};
+});
+
+WordDisplay.displayName = 'WordDisplay';
 
 export default WordDisplay;

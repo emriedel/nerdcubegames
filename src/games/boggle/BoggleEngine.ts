@@ -49,11 +49,19 @@ export class BoggleEngine extends GameEngine {
     this.gridGenerator = new GridGenerator(seed);
     this.boggleState.grid = this.gridGenerator.generateGrid();
     
-    // Pre-calculate all possible words for scoring
-    const gridLetters = this.boggleState.grid.map(row => 
-      row.map(cell => cell.letter)
-    );
-    this.allPossibleWords = this.validator.findAllWords(gridLetters);
+    // Don't pre-calculate all possible words - do it lazily when needed
+    this.allPossibleWords = [];
+  }
+
+  private getAllPossibleWords(): string[] {
+    if (this.allPossibleWords.length === 0) {
+      // Calculate all possible words lazily
+      const gridLetters = this.boggleState.grid.map(row => 
+        row.map(cell => cell.letter)
+      );
+      this.allPossibleWords = this.validator.findAllWords(gridLetters);
+    }
+    return this.allPossibleWords;
   }
 
   validateMove(position: GridPosition): boolean {
@@ -182,7 +190,8 @@ export class BoggleEngine extends GameEngine {
 
   getBoggleResult(): BoggleResult {
     const foundWords = this.getFoundWords();
-    const totalPossibleScore = this.allPossibleWords.reduce(
+    const allPossibleWords = this.getAllPossibleWords();
+    const totalPossibleScore = allPossibleWords.reduce(
       (sum, word) => sum + this.validator.getWordScore(word),
       0
     );
@@ -198,7 +207,7 @@ export class BoggleEngine extends GameEngine {
     return {
       foundWords,
       totalScore: this.boggleState.score,
-      possibleWords: this.allPossibleWords,
+      possibleWords: allPossibleWords,
       totalPossibleScore,
       duration,
       efficiency,
@@ -238,7 +247,8 @@ export class BoggleEngine extends GameEngine {
   }
 
   getPuzzleMetadata(): PuzzleMetadata {
-    const totalPossibleScore = this.allPossibleWords.reduce(
+    const allPossibleWords = this.getAllPossibleWords();
+    const totalPossibleScore = allPossibleWords.reduce(
       (sum, word) => sum + this.validator.getWordScore(word),
       0
     );

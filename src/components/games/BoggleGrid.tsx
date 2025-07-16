@@ -11,7 +11,7 @@ interface BoggleGridProps {
   disabled?: boolean;
 }
 
-const BoggleGrid: React.FC<BoggleGridProps> = ({ grid, onCellSelect, disabled = false }) => {
+const BoggleGrid: React.FC<BoggleGridProps> = React.memo(({ grid, onCellSelect, disabled = false }) => {
   const handleCellClick = useCallback((position: GridPosition) => {
     if (!disabled) {
       onCellSelect(position);
@@ -69,6 +69,8 @@ const BoggleGrid: React.FC<BoggleGridProps> = ({ grid, onCellSelect, disabled = 
       )}
     </div>
   );
-};
+});
+
+BoggleGrid.displayName = 'BoggleGrid';
 
 export default BoggleGrid;
