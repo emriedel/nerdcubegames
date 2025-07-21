@@ -36,11 +36,11 @@ const BoggleGrid: React.FC<BoggleGridProps> = React.memo(({ grid, onCellSelect, 
               'focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2',
               'active:scale-95',
               {
-                'bg-white dark:bg-gray-700 border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white hover:bg-gray-50 dark:hover:bg-gray-600': 
+                'bg-white border-gray-300 text-gray-900 hover:bg-gray-50 shadow-sm': 
                   !cell.isInCurrentPath && !disabled,
-                'bg-blue-500 border-blue-600 text-white shadow-lg': 
+                'bg-yellow-400 border-yellow-500 text-gray-900 shadow-md': 
                   cell.isInCurrentPath,
-                'bg-green-500 border-green-600 text-white shadow-lg': 
+                'bg-green-500 border-green-600 text-white shadow-md': 
                   cell.isSelected,
                 'opacity-50 cursor-not-allowed': 
                   disabled,
@@ -58,7 +58,7 @@ const BoggleGrid: React.FC<BoggleGridProps> = React.memo(({ grid, onCellSelect, 
               backgroundColor: cell.isInCurrentPath 
                 ? cell.isSelected 
                   ? '#10b981' 
-                  : '#3b82f6'
+                  : '#fbbf24'
                 : undefined,
             }}
             transition={{ duration: 0.2 }}
