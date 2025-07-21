@@ -39,17 +39,19 @@ export default function Home() {
           </div>
         </div>
 
-        <div className="bg-gray-50 rounded-lg shadow-sm border border-gray-200 p-6 opacity-60">
-          <h2 className="text-2xl font-semibold text-gray-600 mb-2">
-            Word Ladder
-          </h2>
-          <p className="text-gray-500 mb-4">
-            Transform one word into another by changing one letter at a time.
-          </p>
-          <div className="text-sm text-gray-400">
-            Coming soon...
+        <Link href="/games/word-ladder" className="group" prefetch={true}>
+          <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 hover:shadow-md transition-all duration-200">
+            <h2 className="text-2xl font-semibold text-gray-900 mb-2 group-hover:text-purple-600 transition-colors">
+              Word Ladder
+            </h2>
+            <p className="text-gray-600 mb-4">
+              Transform one word into another by changing one letter at a time.
+            </p>
+            <div className="text-sm text-gray-500">
+              Daily puzzle • 5 minutes • Word transformation
+            </div>
           </div>
-        </div>
+        </Link>
       </div>
     </div>
   )

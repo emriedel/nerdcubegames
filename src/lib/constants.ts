@@ -10,6 +10,11 @@ export const GAME_CONFIGS = {
     gameType: GAME_TYPES.BOGGLE,
     version: '1.0.0',
   },
+  [GAME_TYPES.WORD_LADDER]: {
+    timeLimit: 300, // 5 minutes in seconds
+    gameType: GAME_TYPES.WORD_LADDER,
+    version: '1.0.0',
+  },
 } as const;
 
 export const STORAGE_KEYS = {
@@ -30,6 +35,24 @@ export const BOGGLE_CONSTANTS = {
   },
   SCORING: {
     3: 1, 4: 1, 5: 2, 6: 3, 7: 5, 8: 11
+  }
+} as const;
+
+export const WORD_LADDER_CONSTANTS = {
+  MIN_WORD_LENGTH: 4,
+  MAX_WORD_LENGTH: 6,
+  MAX_HINTS: 3,
+  SCORING: {
+    BASE_SCORE: 1000,
+    STEP_PENALTY: 50,
+    HINT_PENALTY: 100,
+    TIME_BONUS_THRESHOLD: 120, // seconds
+    TIME_BONUS_MULTIPLIER: 1.5,
+  },
+  DIFFICULTY_THRESHOLDS: {
+    EASY: { min: 3, max: 5 },
+    MEDIUM: { min: 4, max: 7 },
+    HARD: { min: 6, max: 10 },
   }
 } as const;
 
